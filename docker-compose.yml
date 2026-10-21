@@ -1,0 +1,15 @@
+services:
+  inventory:
+    build: .
+    image: inventory-service:1.0.0
+    container_name: inventory-service
+    ports:
+      - "127.0.0.1:8080:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
