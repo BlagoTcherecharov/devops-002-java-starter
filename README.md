@@ -11,4 +11,14 @@ The service uses static data, listens on port 8080, and exposes JSON:
 - `GET /api/products/{id}`: product or HTTP 404; invalid numeric identifiers return HTTP 400.
 - `GET /actuator/health`: HTTP 200 with `{"status":"UP"}`.
 
+## Running with the image from GHCR
+
+To run the service from the image published to GitHub Container Registry instead of building it locally, use the GHCR compose file:
+
+```bash
+docker compose -f docker-compose-with-ghcr.yaml up -d
+```
+
+Plain `docker compose up` still uses `docker-compose.yml`, which builds the image from the local source.
+
 Create your own Dockerfile and Compose configuration. Build from source, run the packaged JAR with `java -jar`, bind only `127.0.0.1:8080`, and add a container health check against `/actuator/health`. No database, credentials, or external services are needed. Record build output, container logs, investigation, corrections, endpoint checks and cleanup in your troubleshooting report. Do not commit generated JARs or logs containing sensitive data.
