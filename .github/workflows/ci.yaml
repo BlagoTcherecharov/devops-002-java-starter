@@ -78,6 +78,25 @@ jobs:
           ignore-unfixed: true
           exit-code: "1"
 
+      - name: Smoke test image
+        run: |
+          docker run -d --name smoke -p 8080:8080 "$IMAGE:sha-${GITHUB_SHA}"
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/actuator/health | grep -q '"status":"UP"'; then
+              echo "Service is healthy"
+              curl -fsS http://127.0.0.1:8080/api/products
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Service did not become healthy in 60s"
+          docker logs smoke
+          exit 1
+
+      - name: Stop smoke test container
+        if: always()
+        run: docker rm -f smoke || true
+
       - name: Push image
         uses: docker/build-push-action@v7
         with:
