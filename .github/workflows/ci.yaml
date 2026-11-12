@@ -3,6 +3,13 @@ name: CI
 on:
   push:
     branches: [test-blago]
+    paths:
+      - "src/**"
+      - "pom.xml"
+      - "mvnw"
+      - ".mvn/**"
+      - "Dockerfile"
+      - ".github/workflows/ci.yaml"
 
 jobs:
   build-and-test:
