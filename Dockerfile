@@ -1,7 +1,15 @@
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
-COPY . .
-RUN sh mvnw -B clean package -DskipTests
+
+# Build files first: dependencies are downloaded into this layer,
+# which is reused until pom.xml or the Maven wrapper changes
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+RUN sh mvnw -B dependency:go-offline
+
+# Source last: a code change only re-runs this part
+COPY src src
+RUN sh mvnw -B package -DskipTests
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app

@@ -8,3 +8,6 @@ target/
 README.md
 Dockerfile
 docker-compose.yml
+.github/
+docker-compose-with-ghcr.yaml
+*.md

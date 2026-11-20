@@ -97,11 +97,5 @@ jobs:
         if: always()
         run: docker rm -f smoke || true
 
-      - name: Push image
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
+      - name: Push tested image
+        run: docker push --all-tags "$IMAGE"
